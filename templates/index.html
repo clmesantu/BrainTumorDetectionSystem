@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Image</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex; flex-direction: row;
+            height: 100vh; overflow: hidden; margin: 0;
+        }
+        .content { flex: 3; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .log-panel { flex: 1; background: #f8f9fa; padding: 15px; overflow-y: auto; }
+        h1, h2 { color: #333; }
+        form { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        input[type="file"], input[type="text"], input[type="submit"] { margin: 10px 0; padding: 10px; width: 100%; border: 1px solid #ccc; border-radius: 4px; }
+        input[type="submit"] { background: #007bff; color: #fff; cursor: pointer; }
+        input[type="submit"]:hover { background: #0056b3; }
+        .image-container { display: flex; gap: 20px; margin-bottom: 20px; }
+        img { max-width: 100%; border: 1px solid #ddd; border-radius: 8px; }
+        .log-messages { list-style: none; padding: 0; font-size: 0.9em; }
+        .log-messages li { padding: 10px; border-radius: 5px; margin: 5px 0; }
+        .log-messages .info { background: #d1ecf1; color: #0c5460; }
+        .log-messages .error { background: #f8d7da; color: #721c24; }
+        .log-messages .debug { background: #d4edda; color: #155724; }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Upload Image for Tumor Detection</h1>
+        <form id="upload-form" enctype="multipart/form-data">
+            <input type="file" name="image" id="image-input" required>
+            <input type="submit" value="Encrypt and Upload">
+        </form>
+
+        <form id="decrypt-form" style="display:none;">
+            <input type="text" id="key-input" placeholder="Enter decryption key" required>
+            <input type="submit" value="Decrypt and Analyze">
+        </form>
+
+        <h2>Result</h2>
+        <p id="result"></p>
+
+        <div class="image-container">
+            <div>
+                <h2>Original Image</h2>
+                <img id="original-image" style="display:none;">
+            </div>
+            <div>
+                <h2>Processed Image</h2>
+                <img id="processed-image" style="display:none;">
+            </div>
+        </div>
+    </div>
+    <div class="log-panel">
+        <h3>Logs</h3>
+        <ul class="log-messages" id="log-messages"></ul>
+    </div>
+
+    <script>
+        let imageId = '';
+        document.getElementById('upload-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('image', document.getElementById('image-input').files[0]);
+            const res = await fetch('/upload', { method: 'POST', body: formData });
+            const data = await res.json();
+            if (data.error) return alert(data.error);
+            imageId = data.image_id;
+            alert("Encryption Key:\n" + data.encryption_key);
+            document.getElementById('decrypt-form').style.display = 'block';
+        });
+
+        document.getElementById('decrypt-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const key = document.getElementById('key-input').value;
+            const res = await fetch('/decrypt-analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ image_id: imageId, key: key })
+            });
+            const data = await res.json();
+            if (data.error) return alert(data.error);
+
+            document.getElementById('original-image').src = `data:image/png;base64,${data.original_image}`;
+            document.getElementById('original-image').style.display = 'block';
+            document.getElementById('processed-image').src = `data:image/png;base64,${data.image}`;
+            document.getElementById('processed-image').style.display = 'block';
+            document.getElementById('result').innerHTML =
+                `Diagnosis: ${data.diagnosis}<br>Stage: ${data.tumor_stage}<br>Tumor Percentage: ${data.tumor_percentage}%<br>Chance of Cancer: ${data.cancer_chance}`;
+
+            const logBox = document.getElementById('log-messages');
+            logBox.innerHTML = '';
+            data.logs.forEach(log => {
+                const li = document.createElement('li');
+                li.textContent = log;
+                li.className = log.toLowerCase().includes('error') ? 'error' :
+                               log.toLowerCase().includes('debug') ? 'debug' : 'info';
+                logBox.appendChild(li);
+            });
+        });
+    </script>
+</body>
+</html>

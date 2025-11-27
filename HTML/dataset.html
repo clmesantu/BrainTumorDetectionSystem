@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Grid</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            padding: 40px 20px;
+        }
+
+        .column {
+            width: 48%; /* Adjust width as needed */
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 10px solid darkgreen;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 2.8em;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            color: #000000;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 images per row */
+            gap: 100px; /* Spacing between images */
+            margin-top: 20px;
+        }
+
+        img {
+            display: block;
+            width: 100%; /* Responsive */
+            height: auto; /* Maintain aspect ratio */
+            border: 2px solid #4caf50; /* Add border to each image */
+            border-radius: 8px; /* Optional: rounded corners */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .column {
+                width: 100%; /* Stack columns on smaller screens */
+            }
+            .image-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 images per row */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .image-grid {
+                grid-template-columns: repeat(1, 1fr); /* 1 image per row */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="column positive">
+            <h2>POSITIVE</h2>
+            <div class="image-grid">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\positive\0.jpg" alt="Positive Image 1">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\positive\11.jpg" alt="Positive Image 2">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\positive\3.jpg" alt="Positive Image 3">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\positive\4.jpg" alt="Positive Image 4">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\positive\5.jpg" alt="Positive Image 5">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\positive\6.jpg" alt="Positive Image 6">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\positive\7.jpg" alt="Positive Image 7">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\positive\8.jpg" alt="Positive Image 8">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\positive\9.jpg" alt="Positive Image 9">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\positive\10.jpg" alt="Positive Image 10">
+            </div>
+        </div>
+        <div class="column negative">
+            <h2>NEGATIVE</h2>
+            <div class="image-grid">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\negative\1.jpg" alt="Negative Image 1">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\negative\2.jpg" alt="Negative Image 2">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\negative\3.jpg" alt="Negative Image 3">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\negative\4.jpg" alt="Negative Image 4">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\negative\5.jpg" alt="Negative Image 5">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\negative\6.jpg" alt="Negative Image 6">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\negative\7.jpg" alt="Negative Image 7">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\negative\8.jpg" alt="Negative Image 8">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\negative\9.jpg" alt="Negative Image 9">
+                <img src="C:\Users\Admin\Desktop\Tumour detection\tumor_detection\dataset\negative\10.jpg" alt="Negative Image 10">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

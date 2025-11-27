@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Trainer and App Runner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 15px 25px;
+            margin: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #output {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            text-align: left;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+    </style>
+    <script>
+        async function executeAction(action) {
+            const output = document.getElementById('output');
+            output.textContent = `Executing ${action}... Please wait.`;
+
+            try {
+                const response = await fetch(`http://localhost:3000/${action}`, { method: 'POST' });
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    if (action === 'run-app') {
+                        output.innerHTML = `
+                            <p>${result.message}</p>
+                            <a href="http://127.0.0.1:5000" target="_blank">Go to the App</a>
+                        `;
+                    } else {
+                        output.textContent = result.message;
+                    }
+                } else {
+                    output.textContent = `Error: ${result.message}`;
+                }
+            } catch (error) {
+                output.textContent = `Request failed: ${error.message}`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Model Trainer and App Runner</h1>
+    <button onclick="executeAction('train-model')">TRAIN MY MODEL</button>
+    <button onclick="executeAction('run-app')">RUN MY APP</button>
+
+    <div id="output"></div>
+</body>
+</html>
